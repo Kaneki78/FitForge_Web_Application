@@ -1,0 +1,98 @@
+/* Import the Poppins font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+/* --- Main Body and Background --- */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    /* The soft green background from your design */
+    background-color: #8FBC8F; /* A nice, muted sea green */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-container {
+    text-align: center;
+}
+
+/* --- The User Icon at the top --- */
+.admin-icon {
+    width: 80px;
+    height: 80px;
+    background-color: #2E8B57; /* A darker sea green */
+    border-radius: 50%;
+    margin: 0 auto 20px auto; /* Centered, with space below */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.admin-icon svg {
+    width: 40px;
+    height: 40px;
+    fill: #ffffff; /* White user icon */
+}
+
+/* --- The main white login card --- */
+.admin-login-card {
+    background: #ffffff;
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    width: 400px;
+}
+
+.admin-login-card h2 {
+    color: #333;
+    font-weight: 600;
+    font-size: 1.8em;
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+/* --- The Form Elements --- */
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #E8F5E9; /* Very light green */
+    border-radius: 10px;
+    font-size: 1em;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    color: #333;
+}
+
+/* --- The Login Button --- */
+.admin-login-button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #ffffff;
+    cursor: pointer;
+    /* The dark green gradient from your design */
+    background: linear-gradient(to right, #2E8B57, #1E5637);
+    transition: transform 0.2s ease;
+}
+
+.admin-login-button:hover {
+    transform: translateY(-3px); /* Lifts the button slightly on hover */
+}

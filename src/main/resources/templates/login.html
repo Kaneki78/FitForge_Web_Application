@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - FitForge</title>
+    <link rel="stylesheet" th:href="@{/css/login-style.css}">
+</head>
+<body>
+
+<div id="stars1"></div>
+<div id="stars2"></div>
+<div id="stars3"></div>
+
+<div class="login-container">
+    <div class="login-logo-panel">
+        <img th:src="@{/images/logo.png}" alt="FitForge Logo" class="fitforge-logo">
+        <p class="motivational-quote">Forge Your Body, Master Your Mind.</p>
+    </div>
+
+    <div class="login-form-panel">
+        <h2>Login</h2>
+
+        <div th:if="${successMessage}" style="color: #2e7d32; background-color: #e8f5e9; border: 1px solid #c8e6c9; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 15px;">
+            <p th:text="${successMessage}"></p>
+        </div>
+
+        <div th:if="${param.error}" style="color: red; text-align: center; margin-bottom: 10px;">
+            Invalid username or password.
+        </div>
+        <div th:if="${param.logout}" style="color: green; text-align: center; margin-bottom: 10px;">
+            You have been logged out.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="input-group">
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+
+            <!-- New Remember Me Checkbox -->
+            <div class="input-group" style="display: flex; align-items: center;">
+                <input type="checkbox" id="remember-me" name="remember-me" style="width: auto; margin-right: 10px;">
+                <label for="remember-me">Remember Me</label>
+            </div>
+
+            <button type="submit" class="login-button">Login</button>
+        </form>
+
+        <div class="extra-links">
+            <a th:href="@{/register}">Create an account</a>
+            <a href="#">Forgot password?</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

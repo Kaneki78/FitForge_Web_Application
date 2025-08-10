@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>My Profile - FitForge</title>
+  <link rel="stylesheet" th:href="@{/css/dashboard-style.css}">
+  <link rel="stylesheet" th:href="@{/css/flash-message.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .profile-page-wrapper { display: flex; }
+    .profile-content { flex-grow: 1; padding: 2rem; background-color: #f0f2f5; }
+    .profile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; }
+    .profile-card { background-color: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .profile-card h2 { margin-top: 0; margin-bottom: 1.5rem; border-bottom: 1px solid #eee; padding-bottom: 1rem; }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; margin-bottom: .5rem; font-weight: 600; color: #555; }
+    .form-group input, .form-group select { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+    .form-group input[disabled] { background-color: #e9ecef; cursor: not-allowed; }
+    .submit-button { width: 100%; padding: 15px; border: none; border-radius: 8px; background-color: #2e7d32; color: white; font-size: 18px; font-weight: 600; cursor: pointer; margin-top: 1rem; }
+    .submit-button:hover { background-color: #1b5e20; }
+    .profile-picture-section { text-align: center; margin-bottom: 2rem; }
+    .profile-picture { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+    .profile-picture-section .form-group input[type="file"] { border: none; padding: 0; }
+  </style>
+</head>
+<body>
+
+<div class="flash-message-container">
+  <div th:if="${successMessage}" id="flash-success" class="flash-message" th:text="${successMessage}"></div>
+  <div th:if="${errorMessage}" id="flash-error" class="flash-message" th:text="${errorMessage}" style="background-color: #d9534f; border-color: #c9302c;"></div>
+  <div th:if="${passwordError}" id="flash-error-pass" class="flash-message" th:text="${passwordError}" style="background-color: #d9534f; border-color: #c9302c;"></div>
+</div>
+
+<div class="profile-page-wrapper">
+
+  <div th:replace="~{fragments :: sidebar}"></div>
+
+  <main class="profile-content">
+    <h1>My Profile</h1>
+    <div class="profile-grid">
+
+      <!-- CARD 1: Profile Details & Picture -->
+      <div class="profile-card">
+        <h2>Personal Details</h2>
+
+        <div class="profile-picture-section">
+          <img th:src="${user.profilePictureFilename != null ? '/user-uploads/' + user.profilePictureFilename : '/images/default-profile.png'}"
+               alt="Profile Picture" class="profile-picture">
+          <form th:action="@{/profile/upload-picture}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="profilePicture">Change Picture</label>
+              <input type="file" id="profilePicture" name="profilePicture" accept="image/png, image/jpeg" required>
+            </div>
+            <button type="submit" class="submit-button" style="margin-top: 0; padding: 10px 20px; font-size: 16px; width: auto;">Upload</button>
+          </form>
+        </div>
+
+
+        <form th:action="@{/profile/update}" th:object="${profileDto}" method="post">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" th:value="${user.fullName}" disabled>
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" th:value="${user.username}" disabled>
+          </div>
+          <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" th:field="*{age}">
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" th:field="*{gender}">
+              <option value="" disabled>Select gender</option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="height">Height (cm)</label>
+            <input type="number" step="0.1" id="height" th:field="*{heightInCm}">
+          </div>
+          <!-- The weight input field has been REMOVED from this form -->
+          <button type="submit" class="submit-button">Save Details</button>
+        </form>
+      </div>
+
+      <!-- CARD 2: Change Password (Unchanged) -->
+      <div class="profile-card">
+        <h2>Change Password</h2>
+        <form th:action="@{/profile/change-password}" th:object="${passwordDto}" method="post">
+          <div class="form-group">
+            <label for="currentPassword">Current Password</label>
+            <input type="password" id="currentPassword" th:field="*{currentPassword}">
+          </div>
+          <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <input type="password" id="newPassword" th:field="*{newPassword}">
+          </div>
+          <div class="form-group">
+            <label for="confirmNewPassword">Confirm New Password</label>
+            <input type="password" id="confirmNewPassword" th:field="*{confirmNewPassword}">
+          </div>
+          <button type="submit" class="submit-button">Change Password</button>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  document.getElementById('toggle-button').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('collapsed');
+  });
+  const allFlashMessages = document.querySelectorAll('.flash-message');
+  allFlashMessages.forEach(flashMessage => {
+      if (flashMessage && flashMessage.textContent.trim() !== '') {
+        setTimeout(() => { flashMessage.classList.add('show'); }, 100);
+        setTimeout(() => { flashMessage.classList.remove('show'); flashMessage.classList.add('hide'); }, 5000);
+      }
+  });
+</script>
+
+</body>
+</html>

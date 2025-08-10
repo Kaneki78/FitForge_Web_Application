@@ -1,0 +1,31 @@
+.flash-message-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+    width: 300px;
+}
+
+.flash-message {
+    padding: 15px;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: #fff;
+    background-color: #2e7d32; /* Green for success */
+    border-color: #1b5e20;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.flash-message.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.flash-message.hide {
+    opacity: 0;
+    transform: translateX(100%);
+}

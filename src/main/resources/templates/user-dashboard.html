@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - FitForge</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard-style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .chart-container { position: relative; margin-top: 1.5rem; height: 150px; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
+        .form-group label { margin-bottom: 0.5rem; font-weight: 600; }
+        .form-group input, .form-group select { padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-family: var(--font-family); }
+        .tip-content { font-size: 0.9rem; color: var(--text-color-muted); margin-top: 1rem; line-height: 1.6; }
+        .time-inputs { display: flex; gap: 1rem; }
+    </style>
+</head>
+<body>
+<div class="dashboard-wrapper">
+    <div th:replace="~{fragments :: sidebar}"></div>
+    <main class="main-content">
+        <h1 th:text="'Welcome back, ' + ${#authentication.principal.fullName ?: #authentication.principal.username} + '!'">Welcome!</h1>
+        <div class="widgets-grid">
+
+            <div class="widget">
+                <h2><i class="fas fa-plus-circle icon"></i>Log a Workout</h2>
+                <form th:action="@{/workout/add}" method="post" th:object="${workoutDto}" style="flex-grow: 1; display: flex; flex-direction: column; justify-content: space-around;">
+                    <div class="form-group"><label for="workoutType">Activity</label><select id="workoutType" th:field="*{workoutType}"><option value="Running">Running</option><option value="Weightlifting">Weightlifting</option><option value="Cycling">Cycling</option><option value="Yoga">Yoga</option><option value="Swimming">Swimming</option></select></div>
+                    <div class="form-group"><label for="durationInMinutes">Duration (minutes)</label><input type="number" id="durationInMinutes" th:field="*{durationInMinutes}" placeholder="e.g., 30" required></div>
+                    <button type="submit" class="add-btn purple">Log Activity</button>
+                </form>
+            </div>
+
+            <div class="widget">
+                <h2><i class="fas fa-bed icon"></i>Sleep Tracker</h2>
+                <div class="chart-container" style="height: 120px;"><canvas id="sleepChart"></canvas></div>
+                <form th:action="@{/dashboard/log}" method="post" th:object="${dailyLogDto}" style="margin-top: 1rem;">
+                    <input type="hidden" name="waterIntake" th:value="${todayLog.waterIntake ?: 0}">
+                    <input type="hidden" name="caloriesConsumed" th:value="${todayLog.caloriesConsumed ?: 0}">
+                    <input type="hidden" name="weightInKg" th:value="${user.weightInKg}">
+                    <input type="hidden" name="screenTimeInMinutes" th:value="${todayLog.screenTimeInMinutes ?: 0}">
+                    <div class="time-inputs">
+                        <div class="form-group" style="flex: 1;"><label for="sleepTime">Bedtime</label><input type="time" id="sleepTime" name="sleepTime" th:value="${todayLog.sleepTime}"></div>
+                        <div class="form-group" style="flex: 1;"><label for="wakeUpTime">Wake Up</label><input type="time" id="wakeUpTime" name="wakeUpTime" th:value="${todayLog.wakeUpTime}"></div>
+                    </div>
+                    <button type="submit" class="add-water-btn">Update Sleep</button>
+                </form>
+                <div class="tip-content"><p th:text="${sleepTip}">Sleep tip here.</p></div>
+            </div>
+
+            <div class="widget">
+                <h2><i class="fas fa-mobile-alt icon"></i>Screentime Tracker</h2>
+                <form th:action="@{/dashboard/log}" method="post" th:object="${dailyLogDto}"><input type="hidden" name="waterIntake" th:value="${todayLog.waterIntake ?: 0}"><input type="hidden" name="caloriesConsumed" th:value="${todayLog.caloriesConsumed ?: 0}"><input type="hidden" name="weightInKg" th:value="${user.weightInKg}"><input type="hidden" name="sleepTime" th:value="${todayLog.sleepTime}"><input type="hidden" name="wakeUpTime" th:value="${todayLog.wakeUpTime}"><div class="widget-form-group"><label for="screenTimeInput">Today's Screentime (minutes)</label><input type="number" id="screenTimeInput" name="screenTimeInMinutes" th:value="${todayLog.screenTimeInMinutes ?: 0}" style="margin-bottom: 1rem;"></div><button type="submit" class="add-water-btn">Update Screentime</button></form>
+                <div class="tip-content"><p th:text="${screenTimeTip}">Default tip text.</p></div>
+            </div>
+
+            <div class="widget donut-chart-widget"><h2><i class="fas fa-tint icon"></i>Daily Water Intake</h2><div class="donut-chart-container"><div class="donut-chart" th:classappend="${(todayLog.waterIntake ?: 0) >= waterGoal ? 'water-complete' : 'water-incomplete'}" th:style="'background: conic-gradient(from 0deg, currentColor ' + ${waterGoal > 0 ? ((todayLog.waterIntake ?: 0) * 100.0 / waterGoal) * 3.6 : 0} + 'deg, #EFF2F5 0deg)'"></div><div class="donut-center"><span class="donut-value" th:text="${todayLog.waterIntake ?: 0}">0</span><span class="donut-label">ml</span></div></div><span th:text="'Goal: ' + ${waterGoal} + ' ml'">Goal: 2500 ml</span><button class="add-water-btn" id="add-water-btn">Add Water</button></div>
+            <div class="widget donut-chart-widget"><h2><i class="fas fa-fire-alt icon"></i>Calorie Tracker</h2><div class="donut-chart-container"><div class="donut-chart calories" th:style="'background: conic-gradient(var(--accent-orange) ' + ${(todayLog.caloriesConsumed ?: 0) / 2000 * 360} + 'deg, #EFF2F5 0deg)'"></div><div class="donut-center"><span class="donut-value" th:text="${todayLog.caloriesConsumed ?: 0}">0</span><span class="donut-label">KCAL</span></div></div><span>Goal: 2000 Kcal</span><button class="add-btn purple" id="add-calories-btn">Add Calories</button></div>
+            <div class="widget"><h2><i class="fas fa-bullseye icon"></i>Active Goals</h2><ul class="goals-list"><th:block th:if="${#lists.isEmpty(activeGoals)}"><p>No active goals. <a th:href="@{/goals}">Set one now!</a></p></th:block><th:block th:each="goal : ${activeGoals}"><li class="goal-item"><div class="goal-title"><span th:text="${goal.goalType == 'TARGET_WEIGHT'} ? 'Target Weight' : 'Weekly Workouts'">Goal Name</span><span th:text="${(goal.targetValue > 0 ? #numbers.formatDecimal((goal.currentValue / goal.targetValue * 100), 0, 0) : 0) + '%'}">0%</span></div><div class="goal-progress-bar"><div class="goal-progress" th:style="'width:' + ${(goal.targetValue > 0 ? (goal.currentValue / goal.targetValue * 100) : 0)} + '%;'"></div></div></li></th:block></ul></div>
+            <div class="widget bmi-widget" th:attr="data-category=${user.getBmiCategory()}"><h2><i class="fas fa-weight icon"></i>BMI</h2><div class="bmi-gauge-container"><div class="bmi-gauge-arc"></div><div class="bmi-needle" th:style="'transform: rotate(' + ${user.getBmiValueAsRotation()} + 'deg)'"></div><div class="bmi-value-display" th:text="${user.getBmi()}">N/A</div></div><div class="bmi-category" th:text="${user.getBmiCategory()}">N/A</div></div>
+            <div class="widget" style="justify-content: space-between;"><h2><i class="fas fa-chart-line icon"></i>Weight Tracker</h2><div class="chart-container"><canvas id="weightChart"></canvas></div><form th:action="@{/dashboard/log}" method="post" style="display: flex; flex-direction: column; justify-content: center; margin-top: auto;"><input type="hidden" name="waterIntake" th:value="${todayLog.waterIntake ?: 0}"><input type="hidden" name="caloriesConsumed" th:value="${todayLog.caloriesConsumed ?: 0}"><input type="hidden" name="screenTimeInMinutes" th:value="${todayLog.screenTimeInMinutes ?: 0}"><input type="hidden" name="sleepTime" th:value="${todayLog.sleepTime}"><input type="hidden" name="wakeUpTime" th:value="${todayLog.wakeUpTime}"><div class="widget-form-group"><label for="weight-input">Today's Weight (kg)</label><input type="number" step="0.1" name="weightInKg" id="weight-input" th:value="${user.weightInKg}" placeholder="e.g., 75.5"></div><button type="submit" class="add-btn purple" style="margin-top: 1rem;">Update Weight</button></form></div>
+        </div>
+    </main>
+</div>
+<div class="modal-overlay" id="add-water-modal"><div class="modal-content"><button class="modal-close-btn" id="close-water-modal-btn">&times;</button><h2>Log Water Intake</h2><div class="modal-grid"><div class="modal-form-section"><form th:action="@{/dashboard/log}" method="post"><input type="hidden" name="waterIntake" id="total-water-input" th:value="${todayLog.waterIntake ?: 0}"><div class="form-group"><label for="water-to-add">Amount to Add (ml)</label><input type="number" id="water-to-add" placeholder="e.g., 250" autofocus></div><button type="submit" id="submit-water-btn">Log Intake</button></form></div><div class="modal-chart-section"><p style="text-align: center; color: var(--text-color-muted);">Historical chart will be displayed here.</p></div></div></div></div>
+<div class="modal-overlay" id="add-calories-modal"><div class="modal-content"><button class="modal-close-btn" id="close-calories-modal-btn">&times;</button><h2>Log Calories</h2><div class="modal-grid"><div class="modal-form-section"><form th:action="@{/dashboard/log}" method="post"><input type="hidden" name="caloriesConsumed" id="total-calories-input" th:value="${todayLog.caloriesConsumed ?: 0}"><div class="form-group"><label for="calories-to-add">Amount to Add (Kcal)</label><input type="number" id="calories-to-add" placeholder="e.g., 300" autofocus></div><button type="submit" id="submit-calories-btn" class="add-btn purple">Log Calories</button></form></div><div class="modal-chart-section"><p style="text-align: center; color: var(--text-color-muted);">Historical chart will be displayed here.</p></div></div></div></div>
+<script th:src="@{/webjars/chart.js/dist/chart.umd.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const toggleButton = document.getElementById('toggle-button'); if(toggleButton) { toggleButton.addEventListener('click', function() { document.getElementById('sidebar').classList.toggle('collapsed'); }); }
+        const addWaterModal = document.getElementById('add-water-modal'); if(addWaterModal) { const addWaterBtn = document.getElementById('add-water-btn'); const closeWaterModalBtn = document.getElementById('close-water-modal-btn'); const waterToAddInput = document.getElementById('water-to-add'); const totalWaterInput = document.getElementById('total-water-input'); const submitWaterBtn = document.getElementById('submit-water-btn'); const openWaterModal = () => { addWaterModal.classList.add('active'); waterToAddInput.focus(); }; const closeWaterModal = () => { addWaterModal.classList.remove('active'); waterToAddInput.value = ''; }; addWaterBtn.addEventListener('click', openWaterModal); closeWaterModalBtn.addEventListener('click', closeWaterModal); addWaterModal.addEventListener('click', (e) => { if (e.target === addWaterModal) closeWaterModal(); }); submitWaterBtn.addEventListener('click', function(e) { if (!this.form.querySelector('input[name="caloriesConsumed"]')) { const hidden = document.createElement('input'); hidden.type = 'hidden'; hidden.name = 'caloriesConsumed'; hidden.value = document.getElementById('total-calories-input').value; this.form.appendChild(hidden); } const current = parseInt(totalWaterInput.value) || 0; const toAdd = parseInt(waterToAddInput.value) || 0; totalWaterInput.value = toAdd > 0 ? current + toAdd : current; }); }
+        const addCaloriesModal = document.getElementById('add-calories-modal'); if(addCaloriesModal) { const addCaloriesBtn = document.getElementById('add-calories-btn'); const closeCaloriesModalBtn = document.getElementById('close-calories-modal-btn'); const caloriesToAddInput = document.getElementById('calories-to-add'); const totalCaloriesInput = document.getElementById('total-calories-input'); const submitCaloriesBtn = document.getElementById('submit-calories-btn'); const openCaloriesModal = () => { addCaloriesModal.classList.add('active'); caloriesToAddInput.focus(); }; const closeCaloriesModal = () => { addCaloriesModal.classList.remove('active'); caloriesToAddInput.value = ''; }; addCaloriesBtn.addEventListener('click', openCaloriesModal); closeCaloriesModalBtn.addEventListener('click', closeCaloriesModal); addCaloriesModal.addEventListener('click', (e) => { if (e.target === addCaloriesModal) closeCaloriesModal(); }); submitCaloriesBtn.addEventListener('click', function(e) { if (!this.form.querySelector('input[name="waterIntake"]')) { const hidden = document.createElement('input'); hidden.type = 'hidden'; hidden.name = 'waterIntake'; hidden.value = document.getElementById('total-water-input').value; this.form.appendChild(hidden); } const current = parseInt(totalCaloriesInput.value) || 0; const toAdd = parseInt(caloriesToAddInput.value) || 0; totalCaloriesInput.value = toAdd > 0 ? current + toAdd : current; }); }
+
+        const renderWeightChart = async () => { const ctx = document.getElementById('weightChart'); if (!ctx) return; try { const response = await fetch('/api/weight-progress'); if (!response.ok) throw new Error('Network response was not ok'); const chartData = await response.json(); if (chartData.labels && chartData.labels.length > 1) { new Chart(ctx, { type: 'line', data: { labels: chartData.labels, datasets: [{ label: 'Weight (kg)', data: chartData.data, borderColor: 'var(--accent-purple)', backgroundColor: 'rgba(111, 66, 193, 0.1)', fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false }, x: { ticks: { maxRotation: 0, minRotation: 0, autoSkip: true, maxTicksLimit: 7 } } } } }); } else { ctx.parentElement.innerHTML = '<p style="text-align:center; color: #999;">Log your weight for a few days to see your progress chart.</p>'; } } catch (error) { console.error('Failed to fetch weight chart data:', error); ctx.parentElement.innerHTML = '<p style="text-align:center; color: var(--accent-red);">Could not load chart data.</p>'; } };
+
+        const renderSleepChart = async () => { const ctx = document.getElementById('sleepChart'); if (!ctx) return; try { const response = await fetch('/api/sleep-progress'); if (!response.ok) throw new Error('Network response was not ok'); const chartData = await response.json(); if (chartData.labels && chartData.labels.length > 0) { new Chart(ctx, { type: 'bar', data: { labels: chartData.labels, datasets: [{ label: 'Sleep (hours)', data: chartData.data, backgroundColor: 'var(--accent-blue)' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { callback: function(value) { return value + 'h' } } } } } }); } else { ctx.parentElement.innerHTML = '<p style="text-align:center; color: #999;">Log your sleep for a few days to see your progress.</p>'; } } catch (error) { console.error('Failed to fetch sleep chart data:', error); ctx.parentElement.innerHTML = '<p style="text-align:center; color: var(--accent-red);">Could not load chart data.</p>'; } };
+
+        renderWeightChart();
+        renderSleepChart();
+    });
+</script>
+</body>
+</html>

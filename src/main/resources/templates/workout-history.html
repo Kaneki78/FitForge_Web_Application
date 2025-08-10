@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Workout History - FitForge</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard-style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .history-card {
+            background: #fff;
+            padding: 2rem;
+            border-radius: var(--widget-border-radius);
+            box-shadow: var(--shadow-soft);
+        }
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .history-table th, .history-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .history-table th {
+            font-weight: 600;
+            color: var(--text-color-muted);
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-wrapper">
+    <div th:replace="~{fragments :: sidebar}"></div>
+    <main class="main-content">
+        <h1>Workout History</h1>
+
+        <div class="history-card">
+            <div th:if="${#lists.isEmpty(workouts)}">
+                <p>You haven't logged any workouts yet. Go to the <a th:href="@{/dashboard}">dashboard</a> to log your first one!</p>
+            </div>
+
+            <table th:if="${not #lists.isEmpty(workouts)}" class="history-table">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Activity</th>
+                    <th>Duration</th>
+                    <th>Calories Burned</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="workout : ${workouts}">
+                    <td th:text="${#temporals.format(workout.startTime, 'dd MMM yyyy, h:mm a')}">Date</td>
+                    <td th:text="${workout.workoutType}">Activity</td>
+                    <td th:text="${workout.durationInMinutes} + ' min'">Duration</td>
+                    <td th:text="${workout.caloriesBurned} + ' kcal'">Calories</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+<script>
+    // No new JavaScript is needed for this page, but we need the sidebar toggle script.
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const toggleButton = document.getElementById('toggle-button');
+        if(toggleButton) {
+            toggleButton.addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+            });
+        }
+    });
+</script>
+</body>
+</html>

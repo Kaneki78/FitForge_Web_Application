@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="sidebar" id="sidebar" th:fragment="sidebar">
+  <div class="sidebar-header">
+    <img th:src="@{/images/logo.png}" alt="FitForge Logo" class="logo">
+    <span class="nav-text">FitForge</span>
+    <button class="toggle-button" id="toggle-button"><i class="fas fa-bars"></i></button>
+  </div>
+
+  <div class="profile-section">
+    <img th:src="${#authentication.principal.profilePictureFilename != null ? '/user-uploads/' + #authentication.principal.profilePictureFilename : '/images/default-profile.png'}" alt="Profile Picture" class="profile-pic">
+    <div class="profile-info">
+      <h3 th:text="${#authentication.principal.fullName ?: #authentication.principal.username}">User Name</h3>
+      <p th:text="${'@' + #authentication.principal.username}">@username</p>
+    </div>
+  </div>
+
+  <ul class="nav-menu">
+    <li><a th:href="@{/dashboard}" th:classappend="${activePage == 'dashboard' ? 'active' : ''}"><i class="icon fas fa-th-large"></i><span class="nav-text">Dashboard</span></a></li>
+    <li><a th:href="@{/goals}" th:classappend="${activePage == 'goals' ? 'active' : ''}"><i class="icon fas fa-bullseye"></i><span class="nav-text">My Goals</span></a></li>
+    <li><a th:href="@{/workout-history}" th:classappend="${activePage == 'workout-history' ? 'active' : ''}"><i class="icon fas fa-history"></i><span class="nav-text">Workout History</span></a></li>
+    <li><a th:href="@{/ranking}" th:classappend="${activePage == 'ranking' ? 'active' : ''}"><i class="icon fas fa-trophy"></i><span class="nav-text">Ranking</span></a></li>
+    <li><a th:href="@{/profile}" th:classappend="${activePage == 'profile' ? 'active' : ''}"><i class="icon fas fa-user"></i><span class="nav-text">My Profile</span></a></li>
+  </ul>
+
+  <div class="logout-section">
+    <form th:action="@{/logout}" method="post" style="padding: 0 10px;">
+      <button type="submit" style="background: none; border: none; width: 100%; display: flex; align-items: center; padding: 12px 25px; color: #555; text-decoration: none; font-weight: 500; border-radius: 10px; margin: 4px 0; font-family: 'Poppins', sans-serif; font-size: 16px; cursor: pointer;">
+        <i class="icon fas fa-sign-out-alt" style="font-size: 20px; margin-right: 20px; width: 20px; text-align: center;"></i>
+        <span class="nav-text">Logout</span>
+      </button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - FitForge</title>
+    <link rel="stylesheet" th:href="@{/css/register-style.css}">
+    <style>
+        .field-error {
+            color: #D8000C;
+            font-size: 0.8em;
+            display: block;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+
+    <div class="register-form-panel">
+        <h2>Register for FITFORGE</h2>
+
+        <div th:if="${errorMessage}" style="color: #D8000C; background-color: #FFD2D2; border: 1px solid #D8000C; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 15px;">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <form th:action="@{/register}" th:object="${userDto}" method="post">
+
+            <div class="input-group">
+                <input type="text" th:field="*{fullName}" placeholder="Full Name" required>
+                <span class="field-error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+            </div>
+
+            <div class="input-group">
+                <input type="text" th:field="*{username}" placeholder="Username" required>
+                <span class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+            </div>
+
+            <div class="input-group">
+                <input type="email" th:field="*{email}" placeholder="Email Address" required>
+                <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            </div>
+
+            <div class="input-group">
+                <input type="password" th:field="*{password}" placeholder="Password" required>
+                <span class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </div>
+
+            <div class="input-group">
+                <input type="password" th:field="*{confirmPassword}" placeholder="Confirm Password" required>
+                <span class="field-error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></span>
+            </div>
+
+            <div class="input-group">
+                <select th:field="*{role}" required>
+                    <option value="" disabled selected>Select User Type</option>
+                    <option value="USER">Fitness Enthusiast</option>
+                    <option value="TRAINER">Personal Trainer</option>
+                </select>
+                <span class="field-error" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
+            </div>
+
+            <button type="submit" class="register-button">Register</button>
+        </form>
+
+        <div class="login-link">
+            <span>Already have an account? </span>
+            <a th:href="@{/login}">Login now</a>
+        </div>
+
+        <div class="divider">OR</div>
+
+        <button class="social-login-button">
+            <img th:src="@{https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg}" alt="Google" class="social-logo">
+            Register with Google
+        </button>
+        <button class="social-login-button">
+            <img th:src="@{https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg}" alt="Facebook" class="social-logo">
+            Register with Facebook
+        </button>
+    </div>
+
+    <div class="welcome-panel">
+        <img th:src="@{/images/logo.png}" alt="FitForge Logo" class="fitforge-logo">
+        <h1>Welcome to FITFORGE</h1>
+        <p>Smarter Tracking, Stronger You. Where Strength is Forged, Not Given.</p>
+    </div>
+
+</div>
+
+</body>
+</html>

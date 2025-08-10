@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error - FitForge</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"> <!-- Reusing a base style -->
+    <style>
+        body {
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+        }
+        .error-container {
+            max-width: 500px;
+        }
+        .error-code {
+            font-size: 10rem;
+            font-weight: 700;
+            color: #2e7d32;
+            margin: 0;
+            line-height: 1;
+        }
+        .error-message {
+            font-size: 1.5rem;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 2rem;
+        }
+        .home-link {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #2e7d32;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .home-link:hover {
+            background-color: #1b5e20;
+        }
+    </style>
+</head>
+<body>
+<div class="error-container">
+    <h1 class="error-code" th:text="${errorCode}">500</h1>
+    <p class="error-message" th:text="${errorMessage}">An unexpected error occurred.</p>
+    <a th:href="@{/dashboard}" class="home-link">Go to Dashboard</a>
+</div>
+</body>
+</html>

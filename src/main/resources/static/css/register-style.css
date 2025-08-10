@@ -1,0 +1,253 @@
+/* This is the complete code for the new register-style.css file */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #66bb6a, #388e3c);
+    color: #333;
+}
+
+.main-container {
+    display: flex;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+    max-width: 900px;
+    width: 100%;
+}
+
+.register-form-panel, .welcome-panel {
+    padding: 40px;
+    flex: 1;
+}
+
+.register-form-panel {
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+}
+
+.register-form-panel h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #2e7d32;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box; /* Important for padding and width */
+    font-size: 16px;
+    background-color: #f9f9f9;
+}
+
+.input-group input:focus, .input-group select:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.register-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #2e7d32;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.register-button:hover {
+    background-color: #1b5e20;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #2e7d32;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.divider {
+    text-align: center;
+    margin: 20px 0;
+    color: #aaa;
+    font-weight: 600;
+}
+
+.social-login-button {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.social-login-button:hover {
+    background-color: #f5f5f5;
+}
+
+.social-logo {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* Welcome Panel on the right */
+.welcome-panel {
+    background: linear-gradient(135deg, rgba(200, 230, 201, 0.5), rgba(165, 214, 167, 0.8));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.fitforge-logo {
+    max-width: 100px;
+    margin-bottom: 20px;
+}
+
+.welcome-panel h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1b5e20;
+    margin-bottom: 15px;
+}
+
+.welcome-panel p {
+    font-size: 16px;
+    color: #2e7d32;
+    max-width: 300px;
+}```
+
+#### **Step 1.2: Create the HTML for the Registration Page**
+
+Now we will create the main `register.html` file that will use this new CSS.
+
+**Your Action:** Create a new HTML file.
+
+1.  In your IDE's project explorer, navigate to the `templates` folder here:
+    `src/main/resources/templates`
+2.  **Right-click** on the `templates` folder. From the context menu, select **`New`** -> **`HTML File`**.
+3.  Name the file **`register.html`** and press Enter.
+4.  **Copy** the HTML code below and **paste** it into your new, empty `register.html` file.
+
+```html
+<!-- This is the complete code for the new register.html file -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - FitForge</title>
+    <!-- Link to our new registration stylesheet -->
+    <link rel="stylesheet" th:href="@{/css/register-style.css}">
+</head>
+<body>
+
+<div class="main-container">
+
+    <!-- Left Panel: Registration Form -->
+    <div class="register-form-panel">
+        <h2>Register for FITFORGE</h2>
+
+        <!-- The form will send data to the "/register" endpoint using the POST method -->
+        <form th:action="@{/register}" method="post">
+
+            <div class="input-group">
+                <!-- The 'name' attribute must match the field in our User model -->
+                <input type="text" name="fullName" placeholder="Full Name" required>
+            </div>
+
+            <div class="input-group">
+                <!-- For simplicity, we'll use a single 'username' field for login.
+                     You can choose to use email for login later if you prefer. -->
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+
+            <div class="input-group">
+                <input type="email" name="email" placeholder="Email Address" required>
+            </div>
+
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+
+            <!-- This field is for user confirmation. We will add validation logic later. -->
+            <div class="input-group">
+                <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
+            </div>
+
+            <div class="input-group">
+                <select name="role" required>
+                    <option value="" disabled selected>Select User Type</option>
+                    <!-- As planned, these values match the roles we will use in the backend -->
+                    <option value="USER">Fitness Enthusiast</option>
+                    <option value="TRAINER">Personal Trainer</option>
+                </select>
+            </div>
+
+            <button type="submit" class="register-button">Register</button>
+        </form>
+
+        <div class="login-link">
+            <span>Already have an account? </span>
+            <!-- This link takes the user back to the login page -->
+            <a th:href="@{/login}">Login now</a>
+        </div>
+
+        <div class="divider">OR</div>
+
+        <!-- Social login buttons are for display now; functionality will be added later -->
+        <button class="social-login-button">
+            <img th:src="@{https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg}" alt="Google" class="social-logo">
+            Register with Google
+        </button>
+        <button class="social-login-button">
+            <img th:src="@{https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg}" alt="Facebook" class="social-logo">
+            Register with Facebook
+        </button>
+    </div>
+
+    <!-- Right Panel: Welcome Message and Logo -->
+    <div class="welcome-panel">
+        <!-- Use the logo from our static images folder -->
+        <img th:src="@{/images/logo.png}" alt="FitForge Logo" class="fitforge-logo">
+        <h1>Welcome to FITFORGE</h1>
+        <p>Smarter Tracking, Stronger You. Where Strength is Forged, Not Given.</p>
+    </div>
+
+</div>
+
+</body>
+</html>

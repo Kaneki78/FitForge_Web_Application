@@ -1,0 +1,116 @@
+/* MODIFIED: Replaced the slow, animated gradient with a high-performance static one. */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    color: #ffffff;
+    /* This static gradient is instant and looks great */
+    background: linear-gradient(135deg, #2a4a3a, #1a2a2a);
+    background-size: cover; /* Ensures it covers the whole page */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    /* REMOVED: The slow 'backgroundGradient' animation is gone. */
+}
+
+/* This keyframe is no longer needed, so it has been removed.
+@keyframes backgroundGradient { ... }
+*/
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-button {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    padding: 10px 25px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    /* FASTER ANIMATION: The button now appears much faster. */
+    animation: popIn 0.6s ease-out 0.1s forwards;
+}
+
+.admin-button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-3px);
+}
+
+.logo {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+    opacity: 0;
+    /* FASTER ANIMATION: The logo appears faster. */
+    animation: popIn 0.8s ease-out 0.2s forwards;
+}
+
+.welcome-header {
+    font-size: 3.5em;
+    font-weight: 700;
+    margin: 10px 0;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    /* FASTER ANIMATION: The header appears much faster. */
+    animation: popIn 0.8s ease-out 0.3s forwards;
+}
+
+.welcome-subheader {
+    font-size: 1.2em;
+    max-width: 450px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    opacity: 0;
+    /* FASTER ANIMATION: The sub-header appears much faster. */
+    animation: popIn 0.8s ease-out 0.4s forwards;
+}
+
+.explore-button {
+    padding: 15px 40px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #1a2a2a;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 30px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    /* FASTER ANIMATION: The main button now appears much faster. */
+    animation: popIn 0.8s ease-out 0.5s forwards;
+}
+
+.explore-button:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* MODIFIED: The popIn animation is slightly tweaked for a better feel. */
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* The 'slideInDown' keyframe is no longer used, so it has been removed. */

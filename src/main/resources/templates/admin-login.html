@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login - FitForge</title>
+    <link rel="stylesheet" th:href="@{/css/admin-login-style.css}">
+</head>
+<body>
+<div class="admin-login-container">
+    <img th:src="@{/images/logo.png}" alt="FitForge Logo" class="admin-logo">
+    <h2>Administrator Login</h2>
+
+    <div th:if="${param.error}" style="color: red; text-align: center; margin-bottom: 10px;">
+        Invalid username or password.
+    </div>
+    <div th:if="${param.logout}" style="color: green; text-align: center; margin-bottom: 10px;">
+        You have been logged out.
+    </div>
+
+    <form th:action="@{/admin/login}" method="post">
+        <div class="input-group">
+            <input type="text" name="username" placeholder="Admin Username" required>
+        </div>
+        <div class="input-group">
+            <input type="password" name="password" placeholder="Password" required>
+        </div>
+
+        <!-- New Remember Me Checkbox -->
+        <div class="input-group" style="display: flex; align-items: center; justify-content: center; color: #fff;">
+            <input type="checkbox" id="remember-me" name="remember-me" style="width: auto; margin-right: 10px;">
+            <label for="remember-me">Remember Me</label>
+        </div>
+
+        <button type="submit" class="login-button">Login</button>
+    </form>
+</div>
+</body>
+</html>

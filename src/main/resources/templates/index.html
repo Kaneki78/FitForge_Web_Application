@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to FitForge</title>
+    <!-- This correctly links to the style.css file we just updated -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<a th:href="@{/admin/login}" class="admin-button">Admin</a>
+
+<div class="container">
+    <img th:src="@{/images/logo.png}" alt="FitForge Logo" class="logo"/>
+    <h1 class="welcome-header">Welcome to FITFORGE</h1>
+    <p class="welcome-subheader">Smarter Tracking, Stronger You. Where Strength is Forged, Not Given.</p>
+    <a th:href="@{/login}" class="explore-button">Explore</a>
+</div>
+
+</body>
+</html>

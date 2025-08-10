@@ -1,0 +1,140 @@
+/* Import the same modern font we used before */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+/* --- Main Body and NEW DYNAMIC Starfield Background --- */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #000; /* Solid black for high contrast */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #e0e0e0;
+    overflow: hidden;
+}
+
+/* MODIFIED: The star layers have been completely re-coded for speed and density */
+#stars1, #stars2, #stars3 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px; /* Increased base size */
+    height: 2px; /* Increased base size */
+    background: transparent;
+    border-radius: 50%;
+    animation-name: animStar;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+#stars1 {
+    box-shadow: 20px 249px #FFF, 1223px 1019px #FFF, 125px 1202px #FFF, 1948px 1198px #FFF, 1289px 1353px #FFF, 584px 1720px #FFF, 1263px 137px #FFF, 324px 1177px #FFF, 1200px 1863px #FFF, 1063px 1568px #FFF, 269px 109px #FFF, 1959px 129px #FFF, 1374px 445px #FFF, 354px 1555px #FFF, 1091px 1148px #FFF, 452px 1475px #FFF, 1133px 93px #FFF, 1823px 731px #FFF, 590px 182px #FFF, 1032px 144px #FFF, 1686px 1635px #FFF, 1113px 1261px #FFF, 1332px 189px #FFF, 626px 1476px #FFF, 1968px 1064px #FFF, 582px 145px #FFF, 1061px 1978px #FFF, 1640px 1318px #FFF, 132px 1015px #FFF, 1738px 1466px #FFF, 1284px 627px #FFF, 107px 1999px #FFF, 1238px 1965px #FFF, 1782px 41px #FFF, 1013px 1272px #FFF, 1276px 1735px #FFF, 439px 381px #FFF, 726px 127px #FFF, 1311px 1091px #FFF;
+    animation-duration: 40s; /* Faster animation */
+}
+#stars2 {
+    width: 3px;
+    height: 3px;
+    box-shadow: 1913px 409px #FFF, 1459px 198px #FFF, 1290px 1215px #FFF, 1888px 1445px #FFF, 1421px 1958px #FFF, 73px 37px #FFF, 1260px 453px #FFF, 1152px 1132px #FFF, 1138px 1156px #FFF, 792px 164px #FFF, 869px 1403px #FFF, 514px 1172px #FFF, 184px 1391px #FFF, 1790px 1530px #FFF, 1408px 654px #FFF;
+    animation-duration: 25s; /* Much faster animation */
+}
+#stars3 {
+    width: 4px;
+    height: 4px;
+    box-shadow: 1845px 1019px #FFF, 499px 1836px #FFF, 620px 1104px #FFF, 1869px 703px #FFF, 143px 192px #FFF, 241px 1712px #FFF, 1693px 1814px #FFF, 1324px 1036px #FFF, 399px 1433px #FFF, 321px 1003px #FFF;
+    animation-duration: 15s; /* Very fast animation */
+}
+
+@keyframes animStar {
+    from {
+        transform: translateY(0px);
+    }
+    to {
+        transform: translateY(-2000px);
+    }
+}
+
+
+/* --- The Main Login Card (No changes here) --- */
+.login-container {
+    display: flex;
+    width: 900px;
+    height: 550px;
+    background: rgba(30, 30, 30, 0.6);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* --- Left Panel with Shimmer Gradient (No changes here) --- */
+.login-logo-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    background: linear-gradient(-45deg, #4c4c4c, #dcdcdc, #8a8a8a, #4c4c4c);
+    background-size: 400% 400%;
+    animation: shimmerAnimation 6s ease infinite;
+}
+
+@keyframes shimmerAnimation {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+
+/* --- Logo and Slogan (No changes here) --- */
+.login-logo-panel img.fitforge-logo {
+    max-width: 80%;
+    object-fit: contain;
+    margin-bottom: 20px;
+    animation: logoPopIn 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.motivational-quote {
+    color: #333;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
+    font-size: 1.2em;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.slogan-line {
+    display: block;
+    opacity: 0;
+    animation: fadeInSlogan 1.2s ease-out forwards;
+}
+
+.slogan-line:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+/* --- Right Panel (Form) (No changes here) --- */
+.login-form-panel { flex: 1; padding: 50px; display: flex; flex-direction: column; justify-content: center; background: #212121; }
+.login-form-panel h2 { font-size: 2.5em; font-weight: 600; color: #ffffff; margin-bottom: 30px; text-align: left; }
+.input-group { margin-bottom: 20px; }
+.input-group input { width: 100%; padding: 12px 15px; background: #333; border: 1px solid #555; border-radius: 8px; color: #e0e0e0; font-size: 1em; }
+.login-button { width: 100%; padding: 12px; border: none; border-radius: 8px; background-color: #00c853; color: #ffffff; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease; }
+.login-button:hover { background-color: #00a746; }
+.extra-links { display: flex; justify-content: space-between; font-size: 0.9em; margin-top: 15px; }
+.extra-links a { color: #aaa; text-decoration: none; }
+.extra-links a:hover { text-decoration: underline; }
+.divider { display: flex; align-items: center; text-align: center; color: #777; margin: 25px 0; }
+.divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #444; }
+.divider:not(:empty)::before { margin-right: .5em; }
+.divider:not(:empty)::after { margin-left: .5em; }
+.social-login-button { width: 100%; padding: 12px; border: 1px solid #555; border-radius: 8px; background-color: transparent; color: #e0e0e0; font-size: 1em; font-weight: 500; cursor: pointer; margin-bottom: 10px; transition: background-color 0.3s ease; display: flex; align-items: center; justify-content: center; }
+.social-login-button:hover { background-color: #333; }
+.social-logo { width: 20px; height: 20px; margin-right: 12px; }
+
+
+/* --- All Animation Definitions (No changes here) --- */
+@keyframes logoPopIn { from { opacity: 0; transform: translateY(30px) scale(0.2); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes fadeInSlogan { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }

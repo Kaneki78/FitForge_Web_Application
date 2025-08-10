@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Weekly Ranking - FitForge</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard-style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .ranking-card { background: #fff; padding: 2rem; border-radius: var(--widget-border-radius); box-shadow: var(--shadow-soft); }
+        .ranking-item { display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid var(--border-color); }
+        .ranking-item:last-child { border-bottom: none; }
+        .rank-number { font-size: 1.5rem; font-weight: 700; color: var(--primary-green); width: 50px; }
+        .rank-pic { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin: 0 1rem; }
+        .rank-name { font-weight: 600; flex-grow: 1; }
+        .rank-workouts { font-size: 1.2rem; font-weight: 600; }
+        .top-3 .rank-number { color: var(--accent-orange); }
+    </style>
+</head>
+<body>
+<div class="dashboard-wrapper">
+    <div th:replace="~{fragments :: sidebar}"></div>
+    <main class="main-content">
+        <h1>This Week's Leaderboard</h1>
+
+        <div class="ranking-card">
+            <div th:if="${#lists.isEmpty(rankings)}">
+                <p>No workouts have been logged this week. Be the first!</p>
+            </div>
+            <div th:each="ranking : ${rankings}" class="ranking-item" th:classappend="${ranking.rank <= 3 ? 'top-3' : ''}">
+                <div class="rank-number" th:text="${ranking.rank}">1</div>
+                <img th:src="${ranking.profilePictureFilename != null ? '/user-uploads/' + ranking.profilePictureFilename : '/images/default-profile.png'}" alt="User" class="rank-pic">
+                <div class="rank-name" th:text="${ranking.username}">Username</div>
+                <div class="rank-workouts">
+                    <span th:text="${ranking.workoutCount}">0</span>
+                    <i class="fas fa-dumbbell" style="margin-left: 8px; color: var(--text-color-muted);"></i>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
